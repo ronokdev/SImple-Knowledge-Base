@@ -1,0 +1,28 @@
+::: For push : Git push origin branchName
+
+::: Getting git status→  git status → কোন ব্রাঞ্ছ এ আছি সেইটা বলবে 
+
+::: Getting git log → git log → Current Git এর Status দেখাবে 
+
+::: Going to Different Branch → git checkout branchName
+
+::: Branch Deleting → git branch -D branchName 
+
+::: git branch → আমার repository তে কি কি Branch আছে সেইগুলা দেখাবে 
+
+::: git branch branchName → নতুন ব্রাঞ্ছ তৈরি করে । 
+
+::: Branch এ Push করার আগে কিছু Rules → Git status দিয়ে কি কি ফাইল Modify করা হইসে সেইগুলা দেখা 
+        এরপর → git add fileName ; File Ready করা For commit
+
+::: Git commit -m “My comment” ← Execute করা ।
+
+::: add git ignore file to git → 
+		git add -f -- "full path"
+		example : git add -f -- "vendor\laravel\framework\src\Illuminate\Foundation\Auth\AuthenticatesUsers.php"
+		
+::: Change Git branch Name → 
+	git branch -m old-name new-name
+	
+::: Delete Branch In Remote →
+	git push origin --delete branchName

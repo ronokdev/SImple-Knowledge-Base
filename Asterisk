@@ -1,0 +1,326 @@
+::: RefUrl 
+        → http://www.voip-info.org/wiki/view/Asterisk+CLI
+        → http://asterisk-service.com/downloads/Asterisk-%20The%20Definitive%20Guide,%204th%20Edition.pdf
+        → http://www.asteriskdocs.org/en/3rd_Edition/asterisk-book-html-chunk/asterisk-ACD.html
+        
+::: Extensions.conf(etc/asterisk) : Contains the dialplan of asterisk.It controls how incoming and outgoing calls are handled and routed
+::: Dialplan Extensions হচ্ছে Simple Number. Like : 134,5647 অথবা alphanumeric Names ,Like : Jokh, A93
+::: DTMF(Duel Tone Multi Frequency) : Call হওয়া অবস্থায় কোন Button চাপলে আমরা যে Signal পাই সেইটা । 
+::: Extension Pattern : যদি Extension name Underscore line(_) দিয়ে শুরু হয় তার মানে হচ্ছে এই Extension Name টা হচ্ছে একটা Pattern.
+::: Extension name যদি একটা Pattern হয় তাইলে কিছু Special character Use হয় :
+                X  == O থেকে ৯ এর মদ্ধে কোন কিছু Input দিলে সেইটা Match করবে x এর সাথে ।
+                Z  == ১ থেকে ৯ এর মদ্ধে কোন কিছু Input দিলে সেইটা Match করবে x এর সাথে ।
+                N  == ২ থেকে ৯ এর মদ্ধে কোন কিছু Input দিলে সেইটা Match করবে x এর সাথে । 
+::: Structure of the [general] context:
+        Writeprotect = no এবং Static = yes মানে হচ্ছে , আমি আমার বর্তমান Dial Plan টা  “Dialplan Save” এই Command চালায়ে Save করতে পারবো । Asterisk Commands link : All commands
+        
+        Autofallthrough যদি Set করা থাকে , এবং তখন যদি একটা Extension run out of things to do হয় তখন asterisk সেই call টা Termenate করে দিবে With Busy or Congestion or Hangup 
+        Set করা না থাকে এবং তখন যদি একটা Extension run out of things to do হয় তখন asterisk Wait করে পরের ডায়ালকৃত Extention এর জন্য 
+        
+        Clearglobalvars যদি 
+        Set করা থাকে , তাহলে জখন আমরা একবার asterisk reload দিবো তখন GlobalVariable গুলা Cleared হয়ে যাবে এবং নতুন Value assing হয়ে যাবে 
+        Set করা না থাকে , তাহলে জখন আমরা একবার asterisk reload দিবো তখন GlobalVariable গুলা cleared হবে নাহ বরং তার আগের Value তেই সে assign হয়ে থাকবে । যদি আমরা Delete ও করে দেই তবুও তারা তাদের আগের Value তেই assign হয়ে থাকবে। 
+
+::: Dialplan এ Main concept হচ্ছে ৪ টা
+        Contexts
+        Extensions
+        Priorities
+        Applications
+        
+        
+::: Contexts : Third Brackets এর ভিতরে থাকে
+                [this_is_a_context]
+:::  Extensions  → এইটা হচ্ছে একটা Numeric Identifier.যে নাম্বার এ ডায়াল করা হয় সেই Phone Numb একটা Dial Plan এর মদ্ধে Call ঢুকলে কি হবে সেইটা define করা থাকে Extension এ
+                Syntax:   
+                 exten => name of the extension, priority of the extension , application()
+                 Example : exten =>123,1,Answer()
+
+
+::: Priority : প্রতিটা extension এর কিছু ধাপ থাকে , সেইগুলাকে Priority বলে
+::: Exten => 123,1,answer() 
+                    123,n,application()
+:::  n = next
+::: The same => operator
+::: Exten => 123,1,Answer()
+::: Same=> লিখলে এইটুকু Exten => 123 পুরাটা সে বুঝে নেয়
+                Same => n,do something
+                Same => n,Hangup()
+
+:::  Adding label to the priorities
+        Exten => 123, n(label),application()
+
+::: Application:
+        Answer()    →  Answer calls automatically
+        Playback()  →  Ignores User input while playing background sounds
+        Hangup()    →  cut the line automatically
+        Goto() → Syntax → Goto(context,extension,priority)
+        Background() → can take inputs(DTMF signals) while playing Background Music
+        WaitExten() → Background এ Sound এরপর asterisk wait করে কিছু সেকেন্ড এর জন্য Wait করার সময় Define করে দেয়া জায় ।  
+                Example:
+                WaitExten(time in seconds)
+                WaitExten(5)
+
+::: Dialplan এ কিছু চেঞ্জ করলে Dialplan reload Command চালাইতে হবে ।
+::: etc/asterisk/sip.conf এ  Trunk Add : register => username:secret@host/callbackextention (This format Can Differ)
+                Secret = password
+                
+::: For converting audio to a supportable format:
+        Link   →    http://audio.online-convert.com/convert-to-wav
+                        Change Bit resolution     →  16 Bit
+                        Change Sampling Rate     →  8000 Hz
+                        Change audio Channels      →  mono
+
+::: Verbose → console এ Output দেখানোর জন্য Use করা হয় । 
+
+::: XTRA →
+        → কেউ Call দিলে সেইটার সব Record  →cdr←  টেবিল এ থাকে ।
+        →  কোন Call আসলে সেইটা যদি queue এ ঢুকে তাহলে সেইটার সব রেকর্ড →queue_log← এ থাকবে ।  
+        → cdr টেবিল এর →uniqueid নিয়ে queue_log এর →callid তে Search দিলে Queue Log দেখা যাবে ।   
+        → Agent To Agent call করার জন্য 
+        → Structure → exec_dial(‘SIP    ’,$did);
+        → Exec_dial   →means→   execute Dial
+        → প্রতিটা Agent এর একটা SIP থাকে । SIP হচ্ছে জখন আমরা একটা এজেন্ট বানাই তখন তার একটা আইডি তৈরি হয় । এইটা পাওয়া যাবে Database এর → company_agent → name টেবিলে ।
+        → Agent to agent কল হইলে 
+                Agent 1 এর Sip → 1001
+                Agent 2 এর Sip → 1002
+                Call হইলে 1001 → to → 1002 
+        → Agent to Outside World Call হইলে 
+                Structure → exec_dial(‘SIP’,$row[‘company_code’].’_1/’.$dst);
+
+::: Outgoing এর জন্য Trunk টাই হচ্ছে SIP
+::: Trunk এর Name আলাদা তাই Trunk এর নাম টা আমরা Construct করে নেয়া  হইসে। 
+::: Agent থেকে বাইরে কল দেয়ার জন্য Trunk Use করা হয় । 
+::: Trunk এর Structure → 123456789:123456789@test (May Differ)
+::: test → এইটা SIP Name
+
+::: What is VOIP →  Voice Over Internet Protocol.
+যদি Internet Connection ভালো হয় তাহলে Phone Service , Internet Connection এর মাধ্যমে পাওয়া জায় , Instead Of local Phone Company.
+
+::: Asterisk Log file directory → cd /var/log/asterisk
+
+
+::: Asterisk 13.17 on Centos 6 Install Process
+        reflink1 : https://linoxide.com/tools/install-setup-asterisk-13-pbx-centos-7/
+        reflink2 :  http://www.ipcomms.net/sample-device-configurations/41-asterisk/179-asterisk-13-on-centos
+
+               → yum update -y
+               →  sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
+               →  Reboot
+               →  yum install -y make wget openssl-devel libsrtp libsrtp-devel ncurses-devel newt-devel libxml2-devel kernel-devel gcc gcc-c++ sqlite-devel libuuid-devel
+               →  cd /usr/src/
+               →  wget http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz
+               →  tar zxvf asterisk*
+               →  cd /usr/src/asterisk*
+               →  uname -a
+               →  ./configure --with-pjproject-bundled --libdir=/usr/lib64
+               →  make menuselect
+               →  make && make install
+               →  make samples
+               →  make config
+               →  service asterisk start
+               →  asterisk -rvvv
+               →  Changes needs to make ►►►
+               →  FILE PATH → etc/asterisk
+               →  File Name →
+                       →  Http.conf
+                       →  Extensions.conf
+                       →  Sip.conf
+                       →  Cel.conf
+                       →  Cel_odbc.conf
+                       →  Res_odbc.conf
+                       →  Modules.conf
+                       →  Cdr_odbc.conf
+                       →  Extconfig.conf
+                       →  Cdr_adaptive_odbc.conf
+                       →  Cdr_manager.conf
+                       →  Ari.conf
+                       →  Acl.conf
+                       →  Manager.conf
+                       
+                       
+::: Installing Jansson (CentOS 7 JSON support)→
+        Error: configure: error: *** JSON support not found (this typically means the libjansson development package is missing)
+        
+               →  Download latest Jansson tarball from Latest Releases. (http://www.digip.org/jansson/releases/)
+               →  tar -zxvf jansson-2.10.tar.gz
+               →  cd jansson-2.10
+               →  ./configure
+               →  make
+               →  make check
+               →  make install
+               
+               
+               →  Jansson Documentation: (https://jansson.readthedocs.io/en/latest/gettingstarted.html#compiling-and-installing-jansson)
+               
+::: Alternative Setup for Jansson (CentOS 7 JSON support) → 
+        →  wget http://www.digip.org/jansson/releases/jansson-2.10.tar.gz
+        →  tar -zxvf jansson-2.10.tar.gz
+        →  Cd jansson-2.10
+        →  ./configure
+        →  Make
+        →  make check
+        → make install
+
+
+::: Installing codec_opus.so →
+        → Download from → http://my.digium.com/en/docs/opus/opus-download/
+        → Copy the codec_opus.so file into the Asterisk module directory (Very Important) 
+                → by default,/usr/lib/asterisk/modules/ OR
+                → by default,/usr/lib64/asterisk/modules/
+        → Copy the codec_opus_config-en_US.xml file into the Asterisk external
+        → documentation directory (by default,/var/lib/asterisk/documentation/third party).
+
+
+::: Installing SRTP →
+        →  First follow Asterisk 13.17 on Centos 6 Install Process → 1 to 17:b:v
+        →  Run command → module show like srtp
+        →  [root@localhost your-Asterisk-folder]
+        →  yum -y update
+        →  yum install libsrtp libsrtp-devel
+        →  make clean && make distclean
+        →  ./configure
+        →  make menuselect
+        →   Check res_srtp is Selected Or Not.
+        →  make && make install
+        →  asterisk -rx "core restart when convenient"
+        →  service asterisk restart
+        
+        
+        
+::: Important Links →
+                →  Menuselect Clean → https://wiki.asterisk.org/wiki/display/AST/Checking+Asterisk+Requirements
+                →  make clean && make distclean
+                →  ./configure
+                →  make menuselect
+                →  make && make install
+                →  make config
+                →  make samples
+                →  WebRtc Tutorial → https://wiki.asterisk.org/wiki/display/AST/WebRTC+tutorial+using+SIPML5
+                
+                
+::: Important Commands→
+        * Reload asterisk → asterisk -rx "core restart when convenient"
+        * Check SIp packet for a IP → tcpdump -nqt -s 0 -A -i eth0 port 5060 | grep IP address
+        * Get public ip address from which we send request to dhakacom / telebangla for SIP registration Command → curl ipecho.net/plain; echo
+
+::: Important Findings →
+        * We have to add all the library before compiling Asterisk.
+                
+::: Important Links For Call Center →
+        * Using TCP Dump → http://nil.uniza.sk/network-security/analyzers/using-tcpdump-sip-diagnostic
+        
+        
+::: Enable Log on Asterisk →
+        * Log File Path on CentOS: /var/log/asterisk/fileName
+        * Asterisk File name & path for managing Log→
+                Logger.conf (etc/asterisk)
+                Logrotate.conf (etc/)
+        * File Usability →
+                Logger.conf : we can define the logging file name.
+                
+                
+::: Asterisk-users Can-re-invite - yes/no Explained(http://lists.digium.com/pipermail/asterisk-doc/2004-June/000547.html)
+
+::: Difference Between invite request & re-invite request
+        * Track Sip flow by WIRESHARK (https://www.wireshark.org/download.html)
+        * In Session Initial Protocol → Message Header → To
+        * There is an extra tag in the re-invite packet.
+        * Example :
+                Invite : <sip:2099@172.16.24.157:5060;transport=UDP>
+                Re-invite :  <sip:2099@172.16.24.157:5060;transport=UDP>;tag=Azv0OFyZhl
+                
+::: Setting SIP header on agent calls made by a queue (http://lists.digium.com/pipermail/asterisk-users/2009-February/227198.html)
+
+
+::: Asterisk 11 on Centos 6 Install Proces →
+
+        Reference Link → http://www.voip-info.org/wiki/view/Asterisk+11+Installation+on+CentOS+6
+        
+        → yum update -y
+        → sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
+        → Reboot
+        → yum install -y make wget openssl-devel ncurses-devel newt-devel libxml2-devel kernel-devel gcc gcc-c++ sqlite-devel
+        → cd /usr/src/
+        → Download asterisk 
+        → wget http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-11-current.tar.gz
+        → If a do not work then
+        → Go to : https://drive.google.com/file/d/163eh6zQN_1pQWXdB7aoRzZIe_Gst5q7l/view
+        → Download the asterisk File
+        → Copy the asterisk file to the usr/src directory.
+        → tar zxvf asterisk*
+        → cd /usr/src/asterisk*
+        → uname -a
+        → ./configure --libdir=/usr/lib64  
+        → make menuselect 
+        → make 
+        → make install
+                → Select 
+                → res_config_mysql
+                → App_mysql
+                → cdr_mysql
+        → make samples
+        → make config
+        → service asterisk start
+        → asterisk -rvvv
+        → now add the following in /etc/asterisk/cdr.conf file
+                ;csv
+                [mysql]
+                usegmtime=yes    ; log date/time in GMT.  Default is "no"
+                loguniqueid=yes  ; log uniqueid.  Default is "no"
+                loguserfield=yes ; log user field.  Default is "no"
+       
+        → add the following in /etc/asterisk/cdr_mysql.conf
+                [global]
+                hostname=localhost
+                dbname=vcc
+                table=cdr
+                Password=
+                user=root
+                ;port=3306
+                ;sock=/tmp/mysql.sock
+                ;userfield=1
+                
+        →  now edit /etc/asterisk/extconfig.conf
+                sippeers => mysql,general,company_agent
+                sipregs => mysql,general,sipregs
+                queues => mysql,general,company_queue
+                queue_members => mysql,general,queue_members
+                musiconhold => mysql,general,musiconhold
+                queue_log => mysql,general
+                
+         → add the following in /etc/asterisk/res_mysql_config.conf
+                [general]
+                dbhost = localhost
+                dbname = vcc
+                dbuser = root
+                dbpass =
+                dbport = 3306
+                dbsock = /tmp/mysql.sock    or    /var/lib/mysql/mysql.sock
+                ;dbcharset = latin1
+                ;requirements=warn ; or createclose or createchar
+        → yum update
+        → rpm -ivh http://dl.fedoraproject.org/pub/epel/6/$(uname -i)/epel-release-6-8.noarch.rpm
+        → yum --disablerepo=epel -y update  ca-certificates
+        → yum update
+
+
+
+
+
+::: Remove Asterisk from a server
+        rm -rf /etc/asterisk
+        rm -f /etc/zaptel.conf
+        rm -rf /var/log/asterisk
+        rm -rf /var/lib/asterisk
+        rm -rf /var/spool/asterisk
+        rm -rf /usr/lib/asterisk
+        rm -rf /usr/lib64/asteris
+        
+::: Add Queue Member Dynamically From CLI window 
+        → queue add member MemberName to QueueName
+        → Example : queue add member 1009/1009 to totthoapa_queue
+        
+::: Remove Queue Member Dynamically From CLI window 
+        → queue remove member MemberName from QueueName
+        → Example : queue remove member SIP/1009 from totthoapa_queue
+		

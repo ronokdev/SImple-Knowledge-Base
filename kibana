@@ -1,0 +1,148 @@
+#__ ReferenceURL → https://www.digitalocean.com/community/tutorials/how-to-install-elasticsearch-logstash-and-kibana-elk-stack-on-centos-7#install-logstash
+
+:: install java 8
+    → yum -y install java-1.8.0-openjdk
+    
+#___Install Elasticsearch ------------------------------
+
+:: Run the following command to import the Elasticsearch public GPG key into rpm:
+** extra : Each stable RPM (RedHat Package Manager) package that is published by CentOS Project is signed with a GPG signature
+
+   → rpm --import http://packages.elastic.co/GPG-KEY-elasticsearch
+
+:: Create a new yum repository file for Elasticsearch. Note that this is a single command:
+   → echo '[elasticsearch-2.x]
+      name=Elasticsearch repository for 2.x packages
+      baseurl=http://packages.elastic.co/elasticsearch/2.x/centos
+      gpgcheck=1
+      gpgkey=http://packages.elastic.co/GPG-KEY-elasticsearch
+      enabled=1
+      ' | sudo tee /etc/yum.repos.d/elasticsearch.repo
+    → yum -y install elasticsearch
+    → vi /etc/elasticsearch/elasticsearch.yml
+    
+:: You will want to restrict outside access to your Elasticsearch instance (port 9200), so outsiders can't read your data or shutdown your Elasticsearch cluster through the HTTP API. Find the line that specifies network.host, uncomment it, and replace its value with "localhost" so it looks like this
+    → network.host: localhost
+    → Save and exit elasticsearch.yml (:wq Press Enter)
+
+:: Now start Elasticsearch
+   → systemctl start elasticsearch
+   
+:: Then run the following command to start Elasticsearch automatically on boot up:
+   → systemctl enable elasticsearch 
+
+:: Now that Elasticsearch Should be up and running, let's install Kibana.
+
+
+#__Install Kibana ---------------------------
+
+:: Create and edit a new yum repository file for Kibana:
+  →  vi /etc/yum.repos.d/kibana.repo
+
+:: Add the following repository configuration:
+  → [kibana-4.4]
+    name=Kibana repository for 4.4.x packages
+    baseurl=http://packages.elastic.co/kibana/4.4/centos
+    gpgcheck=1
+    gpgkey=http://packages.elastic.co/GPG-KEY-elasticsearch
+    enabled=1
+    
+:: Install Kibana with this command:
+  → yum -y install kibana
+:: Open the Kibana configuration file for editing:
+  → sudo vi /opt/kibana/config/kibana.yml
+  
+:: In the Kibana configuration file, find the line that specifies server.host, and replace the IP address ("0.0.0.0" by default) with "localhost"
+    → server.host: "localhost"
+
+
+*** Save and exit. This setting makes it so Kibana will only be accessible to the localhost. This is fine because we will install an Nginx reverse proxy, on the same server, to allow external access.
+
+:: start the Kibana service, and enable it:
+    → systemctl start kibana
+    → chkconfig kibana on
+    
+*** Before we can use the Kibana web interface, we have to set up a reverse proxy. Let's do that now, with Nginx.
+
+
+#__Install Ngnix ----------------------------------
+** Extra :: EPEL (Extra Packages for Enterprise Linux) is open source and free community based repository project from Fedora team which provides 100% high quality add-on software packages for Linux distribution including RHEL (Red Hat Enterprise Linux), CentOS, and Scientific Linux
+
+
+:: Add the EPEL repository to yum:
+    → yum -y install epel-release
+
+:: Now use yum to install Nginx and httpd-tools:
+    → yum -y install nginx httpd-tools
+    
+:: Use htpasswd to create an admin user, called "kibanaadmin" (use another name), that can access the Kibana web interface:
+    → htpasswd -c /etc/nginx/htpasswd.users kibanaadmin
+    → Give New Password
+    → Memorize it (Very Important)
+
+:: open the Nginx configuration file in your favorite editor. We will use vi:
+    → vi /etc/nginx/nginx.conf
+
+:: Find the default server block (starts with server {  ), the last configuration block in the file, and delete all of it. When you are done, the last two lines in the nginx.conf file should should look like this:
+    →     include /etc/nginx/conf.d/*.conf;
+    →  }
+    → Press :wq enter
+
+:: we will create an Nginx server block in a new file:
+    →  vi /etc/nginx/conf.d/kibana.conf
+
+:: Paste the following code block into the file. Be sure to update the server_name to match your server's name:
+  → 		server {
+		listen 80;
+
+		server_name localhost.localdomain;
+
+		auth_basic "Restricted Access";
+		auth_basic_user_file /etc/nginx/htpasswd.users;
+
+		location / {
+			proxy_pass http://localhost:5601;
+			proxy_http_version 1.1;
+			proxy_set_header Upgrade $http_upgrade;
+			proxy_set_header Connection 'upgrade';
+			proxy_set_header Host $host;
+			proxy_cache_bypass $http_upgrade;        
+		}
+	}
+
+    → press :wq enter
+    →  This configures Nginx to direct your server's HTTP traffic to the Kibana application, which is listening on localhost:5601. Also, Nginx will use the htpasswd.users file, that we created earlier, and require basic authentication.
+    
+:: start and enable Nginx to put our changes into effect:
+   → systemctl start nginx
+   → systemctl enable nginx
+   
+:: Access Kibana from your web browser with the deployed Service IP address.
+
+** Extra :: 
+    ** Error : nginx stating failure.
+       → Solution :: Find more on here → https://unix.stackexchange.com/questions/175578/unable-to-start-nginx-on-centos-7
+       → systemctl stop httpd
+       → Change http port 80 to Any other PORT, Goto /etc/httpd/conf/httpd.conf
+       → service httpd restart
+       → service httpd status
+
+
+#__Install Logstash ----------------------------
+:: The Logstash package shares the same GPG Key as Elasticsearch.so let's create and edit a new Yum repository file for Logstash:
+   →  vi /etc/yum.repos.d/logstash.repo
+	
+
+
+
+
+    
+    
+
+
+
+
+
+
+
+    

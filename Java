@@ -1,0 +1,15 @@
+::: Tutorial site → https://www.javatpoint.com/java-tutorial
+::: JVM → java virtual machine.It provides runtime environment in which java bytecode can be executed.
+::: JRE →  Java Runtime environment.It physically Exists.It is the implementation of JVM
+::: JDK → Java Development kit
+::: Object → An entity that has state and behaviour.Ex :chair, Pen
+::: Class → Collection of Objects. It is a logical Entity.
+::: Inheritance → জখন একটা অব্জেক্ট তার parent এর সব properties and behaviour acquire করে ।
+::: Polymorphism → জখন একটা task অনেক ভাবে perform করা জায় । 
+::: Java তে Method Overloading , Method Overriding করে polymorphism achive করা হয় ।
+::: Abstraction → জখন internal details hide করে সুধু functionality show করা হয় তখন 
+::: Java তে abstract class আর interface দিয়ে abstraction achive করা হয়
+::: Encapsulation →  Code আর data একটা single unit এ bind করা
+::: Java bean is a example of encapsulation
+::: Last page → https://www.javatpoint.com/object-and-class-in-java
+::: GlassFish .jar file location after Deployment →  /root/glassfish4/glassfish/domains/domain1/applications/__internal/AppName

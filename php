@@ -337,4 +337,6 @@ Format :
                 RewriteRule ^ index.php [L]
                 </IfModule>
         
+::: Laravel Eliquent Delete →
+        $res=System::where('id',$tempRequest['id'])->delete();
     

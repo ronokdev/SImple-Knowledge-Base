@@ -1,3 +1,11 @@
+::: GET request → 
+     this.$http.get('/fetchSystem').then(response => {
+                             this.tableData = this.allsystem = response.body;
+                     }, response => {
+                             console.log("This is error Callback");
+                     });
+                     
+                     
 ::: Post Requst with HTTp →
 
     this.$http.post('ControllerUrl',dataInArray,{
@@ -31,9 +39,188 @@
             
 
 ::: Use VueTable 2
-  → Include vuetable 2 JS 
+
+  → Include vuetable 2 JS scripts
     → https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js
     → https://cdn.jsdelivr.net/npm/vue-resource@1.3.6
     → https://drive.google.com/file/d/15fB4_UrOfn0KTSPP2EvAYnu5XUeZ0IeK/view?usp=sharing
+    
+    Demo Code Of VueTable 2 ::
+        
+        → FrontEnd →
+        
+            <vuetable ref="vuetable"
+                                :api-url="allfetchSystemUrl"
+                                {{--api-url = "https://vuetable.ratiw.net/api/users"--}}
+                                :fields="fields"
+                                :sort-order="sortOrder"
+                                :css="css.table"
+                                pagination-path=""
+                                :per-page="5"
+                                @vuetable:pagination-data="onPaginationData"
+                                @vuetable:loading="onLoading"
+                                @vuetable:loaded="onLoaded">
+
+
+                                <template slot="actions" scope="props">
+                                    <div class="pmd-table-row-action">
+                                        <a @click="editRow(props.rowData)" class="btn pmd-btn-fab pmd-btn-flat pmd-ripple-effect btn-default btn-sm">
+                                            <i class="material-icons md-dark pmd-sm">edit</i>
+                                        </a>
+                                        <a @click="systemDelete(props.rowData)" class="btn pmd-btn-fab pmd-btn-flat pmd-ripple-effect btn-default btn-sm">
+                                             <i class="material-icons md-dark pmd-sm">delete</i>
+                                        </a>
+                                    </div>
+                                </template>
+                        </vuetable>
+                        
+                        <vuetable-pagination ref="pagination" :css="css.pagination"
+                            @vuetable-pagination:change-page="onChangePage">
+                        </vuetable-pagination>
+       
+       → BackEnd → 
+        
+        Vue.use(Vuetable);
+        var viewApp = new Vue({
+             el: '#app',
+             
+                 components: {
+                            'vuetable-pagination': Vuetable.VuetablePagination
+                        },
+
+                 data: {
+                            showEditField:false,
+                            systemValue_edit:'',
+                            systemId_edit:'',
+                            filterSearch:'',
+                            showLoading:false,
+                            isTrue:false,
+                            allsystem:{},
+                            allfetchSystemUrl:allsystemFetchUrl,
+                            fields: [
+                                {
+                                    name: 'name',
+                                    title: '<span class=""></span> System Name',
+                                    sortField: 'name'
+                                },
+                               '__slot:actions'
+                            ],
+                            sortOrder: [
+                                { field: 'name', direction: 'desc' }
+                            ],
+                            css: {
+                                type: Object,
+
+
+                                table: {
+                                    tableClass: 'table table-mc-red pmd-table',
+                                    loadingClass: 'loading',
+                                    ascendingIcon: 'glyphicon glyphicon-chevron-up',
+                                    descendingIcon: 'glyphicon glyphicon-chevron-down',
+                                    handleIcon: 'glyphicon glyphicon-menu-hamburger',
+                                },
+                                pagination: {
+                                    infoClass: 'pull-left',
+                                    wrapperClass: 'customBtn vuletableCUstompagi vuetable-pagination pull-right',
+                                    activeClass: 'customBtn activePegination',
+                                    disabledClass: 'disabled',
+                                    pageClass: 'btn customBtn pmd-btn-raised pmd-ripple-effect btn-default',
+                                    linkClass: 'material-icons md-dark pmd-sm',
+                                    icons: {
+                                        first: '',
+                                        prev: '',
+                                        next: '',
+                                        last: '',
+                                    },
+                                }
+                            }
+                        },
+                        
+                        methods: {
+                                onPaginationData (paginationData) {
+                                    this.$refs.pagination.setPaginationData(paginationData)
+                                },
+                                onChangePage (page) {
+                                    console.log(page);
+                                    this.$refs.vuetable.changePage(page)
+                                },
+                                editRow(rowData){
+                                    this.showEditField = true;
+                                    this.systemValue_edit = this.quoteReplace(JSON.stringify(rowData['name'])) ;
+                                    this.systemId_edit =  this.quoteReplace(JSON.stringify(rowData['id'])) ;
+
+
+                                },
+                                reloadpage(){
+                                    this.$refs.vuetable.reload();
+                                },
+                                deleteRow(rowData){
+                                    //alert("You clicked delete on"+ JSON.stringify(rowData))
+
+
+                                },
+                                onLoading() {
+
+                                    this.isTrue = true;
+                                    this.showLoading = true;
+                                    console.log('loading... show your spinner here')
+                                },
+                                onLoaded() {
+
+                                    this.isTrue = false;
+                                    this.showLoading = false;
+                                    console.log('loaded! .. hide your spinner here')
+                                },
+                        }
+
+      })
+      
+      
+::: function called automatically on Vuejs table Onload →
+
+         mounted() {
+         
+         },
+   
+::: Method declaration System in Vue →
+        
+        onLoaded() {
+            // method BOdy
+        },
+        
+        OR
+        
+         editSystem: function () {
+            // method body
+         }
+         
+::: 2 way binding is done by → v-model attribute
+
+::: v-on:click can also be written as → @click
+
+::: v-bind:test can also be written as → :test
+
+::: functino for replacing double Quote ("") from JSON stringify →
+
+        quoteReplace(pera1){
+            return pera1.replace(/["']/g, "");
+        },
+        
+::: Reload Vuetable after Edit Or Delete →
+        
+        reloadpage(){
+                this.$refs.vuetable.reload();
+            },
+            
+::: Difference between refresh() & reload () method
+
+    → reload () → Save the table data (search & page number) .
+    → reload only fetches data without changes the current page
+    
+    → refresh () → Clear all the table data (search & page number).
+    → The refresh method sets the current page to 1, which means that if you have pagination, your pagination will always be reset to page 1.
+            
+            
+    
   
   

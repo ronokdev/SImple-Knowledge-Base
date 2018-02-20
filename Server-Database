@@ -1,0 +1,144 @@
+::: Run a sql query and store value in a variable
+
+$sql_check_for_todays_data = mysqli_query($link,$sql_1 );
+$return_data = array();
+while($row =  mysqli_fetch_assoc($sql_check_for_todays_data)){
+array_push($return_data,$row);
+
+
+::: Update and Select
+
+UPDATE call_report AS c_r, call_report_input_table AS c_r_i_t 
+                    SET 
+    c_r.total_doc_receive_num = c_r_i_t.total_doc_receive_num_12,
+    c_r.total_number_consulatancy = c_r_i_t.total_number_consulatancy_12,
+    c_r.total_hos_info = c_r_i_t.total_hos_info_12,
+        c_r.total_amp_info = c_r_i_t.total_amp_info_12,
+        c_r.total_complaints = c_r_i_t.total_complaints_12,
+        c_r.total = c_r_i_t.total_12,
+        c_r.about_the_service = c_r_i_t.about_the_service_12
+WHERE c_r_i_t.dmy = '".$formatedd_date."' and c_r.dmy= '".$formatedd_date."' "; 
+
+::: Insert And Select
+INSERT INTO call_report 
+(dmy,total_doc_receive_num,total_number_consulatancy,total_hos_info,
+total_amp_info,total_complaints,total,about_the_service)
+SELECT 
+    Dmy,total_doc_receive_num_3,total_number_consulatancy_3,total_hos_info_3,
+Total_amp_info_3,total_complaints_3,total_3,about_the_service_3
+FROM `call_report_input_table`WHERE dmy = '".$formatedd_date."' ";
+
+
+::: Insert into database from CSV file
+
+if(isset($_POST['submit']))   {
+        $file = $_FILES['file']['tmp_name'];  
+        $handle = fopen($file, "r");  
+        while(($filopen = fgetcsv($handle,1000,",") ) !== false) 
+        {
+            $dat              = $filopen[0];   
+            $total_doc_receive_num        = $filopen[1];
+            $total_doc_receive_num_9am = $filopen[2];
+}
+
+
+::: Use Of ifnull and case
+      Ifnull :  ifnull(COUNT(a.id),0) as total_call,
+      Case :   (CASE WHEN tsa.name = 'Other Hospitals' THEN tat.comments ELSE    tsa.updated_name END)org
+      
+      
+::: Start mysql and httpd on server restart
+::: httpd will Automatically Start on Server StartUp → chkconfig --level 345 httpd on
+::: mysqld will Automatically Start on Server StartUp → chkconfig --level 345 mysqld on
+
+::: Setting password to Mysql:
+        mysql -u root
+        use mysql;
+        update user SET PASSWORD=PASSWORD("password") WHERE USER='root';
+        flush privileges;
+        exit
+        
+::: How to backup database :
+        mysqldump --routines -u root -p[password] [database_name] > dumpfilename.sql
+        Example → mysqldump --routines -u root mkvas > mkvas_for_40.sql
+
+::: How to restore Database :
+        mysql -u root -p[password] [database_name] < dumpfilename.sql
+        Example:
+                mysql -u root test < test.sql
+                This file → test.sql ; must be uploaded on root directory (Centos)
+        
+::: Check if a service is on/of:
+        service service_name status
+        Service_name : mysqld, httpd
+        
+::: start/stop a service
+        service service_name start
+        service service_name stop
+        
+::: Yum problem solve →    
+        Problem : package not found
+        Solution : https://hostnit.com/billing/knowledgebase/197/Cannot-Use-Yum-Update-in-Centos-62.html        
+
+
+::: Install & Configure Phpmyadmin 
+
+        → yum install phpmyadmin
+                 vim /etc/httpd/conf.d/phpMyAdmin.conf
+                        <Directory /usr/share/phpMyAdmin/>
+                           AddDefaultCharset UTF-8
+
+
+                           <IfModule mod_authz_core.c>
+                             # Apache 2.4
+                             <RequireAny>
+                               Require ip <your-ip-address>
+                             </RequireAny>
+                           </IfModule>
+                           <IfModule !mod_authz_core.c>
+                             # Apache 2.2
+                             Order Deny,Allow
+                             Deny from All
+                             Allow from <your-ip-address>
+                           </IfModule>
+                        </Directory>
+                        
+                          <Directory /usr/share/phpMyAdmin/setup/>
+                                   <IfModule mod_authz_core.c>
+                                     # Apache 2.4
+                                     <RequireAny>
+                                       Require ip <your-ip-address>
+                                     </RequireAny>
+                                   </IfModule>
+                                   <IfModule !mod_authz_core.c>
+                                     # Apache 2.2
+                                     Order Deny,Allow
+                                     Deny from All
+                                     Allow from <your-ip-address>
+                                   </IfModule>
+                                </Directory>
+
+
+::: Set date on Centos → date -s "27 DEC 2017 18:00:00
+
+
+
+
+::: Redirect Application to a new port (Centos 7) →
+
+
+  → Refenrence URL : https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-using-firewalld-on-centos-7
+  → check if firewall is running :  
+      firewall-cmd --state
+  → Check the default Configuration : 
+      sudo firewall-cmd --list-all
+  → Add port parmanently to firewall : 
+      sudo firewall-cmd --zone=public --permanent --add-port=portNumber/tcp
+  → Check port list : 
+      sudo firewall-cmd --zone=public --permanent --list-ports
+      or
+      sudo firewall-cmd --zone=public --list-ports 
+  → Reload your firewall to get access to your new service: 
+      firewall-cmd --reload
+  → You can see that it is now among the list of available services: : 
+      firewall-cmd --get-services

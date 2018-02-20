@@ -1,0 +1,36 @@
+
+::: Increase File Size → 
+
+→ Go to php.ini
+→ Search for the 'post_max_siz'e entry, and enter a larger number than the size of your database 
+    → post_max_size = 25M
+→ Edit the entry for 'memory_limit' and give it a larger value than the one given to 'post_max_size'
+→ Then ensure the value of 'upload_max_filesize' is smaller than 'post_max_size'.
+→ The order from biggest to smallest should be:
+    → memory_limit
+    → post_max_size
+    → upload_max_filesize
+→ Restart Apache Services.
+
+
+::: Example :
+    max_execution_time = 5000
+    max_input_time = 5000
+    memory_limit = 1000M
+    post_max_size = 750M
+    upload_max_filesize = 750M
+    
+    
+    
+    
+
+::: Increase Query Execution Time :
+
+→ (For Windows) Go to xampp\phpmyadmin\config.inc.php 
+→ Change $cfg['ExecTimeLimit'] = 6000;
+
+→ Go to xampp\php\php.ini
+→ Change max_execution_time = 5000
+
+→ Go to xampp\mysql\bin\my.ini
+→ max_allowed_packet = 200M

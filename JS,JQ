@@ -1,0 +1,270 @@
+::: ajax request
+      $.ajax({
+                  type:"POST",
+                  url:'ajax_load.php',
+                  dataType:'json',
+                  data:{
+                        dsf:clicked,    
+                     },
+              success:function(data)
+                          {
+                   console.log(data);
+                    for(i=0;i<Object.keys(data).length;i++)
+                  {
+                   //  we can access every data                        
+                  }        
+                      }            
+                      });
+                      
+                      
+                      
+::: Click button using Jquery
+     $(document).on('click','.button_class',function()
+    {
+             // code---------
+    }
+    or
+    $(document).ready(function(){
+       // code---------
+    });
+    
+    
+::: Select a TR and getting the value of the TD using Jquery
+        var variable_name = $(this).closest('tr');
+        var date = variable_name .find('.date_month').val();
+
+
+::: Select custom value from option
+        ($('option:selected', this).attr('mainvalue')
+        
+        
+::: Ajax Url Function structure:
+      $dateStart[0] = $_POST['dsf']; // receiving data by post method
+      $dateStart[1] = $_POST['det'];
+      echo json_encode($AB->p_callProcedure("search_by_date", $dateStart));  // sending data
+      
+      
+        File_get_contents Use করতে হবে । 
+        Sending Post Request and receiving in jquery style
+        var searchText = $("input[name='search']").val();
+        $.post("path/fileName",{searchvalue : searchText},function(output){
+           // code here 
+        }
+      On other php file(receiving the data) :
+      $searching_text = $_POST[searchvalue];
+      
+      
+
+::: Notification Showing style in Jquery 
+      $("#div_id").fadeTo(2000, 500).slideUp(500, function()
+          {
+              $("#div_id").slideUp(500);
+                  });
+                  
+                  
+::: Add scrollbar to a div(css)
+      .scrollable-menu 
+      {
+          height: auto;
+          max-height: 260px;
+          overflow-x: hidden;
+      }
+      
+      
+:::  Empty check in jquery
+    if(!output) 
+    {
+       Code -----
+    }
+    
+    
+
+:::  Add new Row dynamically 
+
+      HTML  → 
+      <div class="input_fields_wrap">
+          <button class="add_field_button">Add More Fields</button>
+          <div><input type="text" name="mytext[]"></div>
+      </div>
+
+      Jquery → 
+
+      $(document).ready(function() {
+          var max_fields      = 10; //maximum input boxes allowed
+          var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+          var add_button      = $(".add_field_button"); //Add button ID
+
+          var x = 1; //initlal text box count
+          $(add_button).click(function(e){ //on add input button click
+              e.preventDefault();
+              if(x < max_fields){ //max input box allowed
+                  x++; //text box increment
+                  $(wrapper).append('<div><input type="text" name="mytext[]"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+              }
+          });
+
+          $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+              e.preventDefault(); $(this).parent('div').remove(); x--;
+          })
+      });
+
+
+
+
+:::  Add select option through Jquery Ajax
+        for(i=0;i<Object.keys(data).length;i++)
+                {
+        $("#thana_select").append($("<option></option>")
+        .attr("value",data[i]['Thana']['id']).text(data[i]['Thana']['name'])); 
+                }
+                
+                
+
+:::  Change Select2 value
+        $('#id').val(value).trigger('change'); 
+
+
+:::  Get a option that can not be selected
+      <option value="" disabled selected>Select your option</option>
+
+
+:::  Find current option value or attr
+      $(this).find('option:selected').attr('attribute Name');
+      
+      
+:::  Download a Multilevel table with JQ in EXCEL:
+
+      In php file → 
+      
+      <a id="dlink"  style="display:none;"></a>    
+      <button onclick="tableToExcel('16263 Sastobatayon Actual Data')" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Click Here to download</button>
+
+      In JS file →
+      
+       var tableToExcel = (function() {
+       var uri = 'data:application/vnd.ms-excel;base64,'
+               , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+               , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+               , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+               return function(filename) {
+
+                   var ctx = {worksheet: 'Multi Level Export Table Example' || 'Worksheet', table: document.getElementById("actual_report_table").innerHTML}
+                 //window.location.href = uri + base64(format(template, ctx))
+
+                 document.getElementById("dlink").href = uri + base64(format(template, ctx));
+                 document.getElementById("dlink").download = filename;
+                 document.getElementById("dlink").click();
+           }
+         })()
+
+
+
+::: Search in/within the select → 
+
+        HTML →         
+        Search The Ward No :<input type="search" id="searchBox" style="width: 31%;">
+                <select id="countries" style="width: 50%;">    
+                    <<option value=""></option>
+                    <?php foreach($result as $row) { ?>    
+                        <option value=<?php echo $row['tts_ward_wise_area']['area_name_with_ward']?>><?php echo $row['tts_ward_wise_area']['area_name_with_ward']?></option>
+                        <?php }?>
+                </select>
+                
+                
+        JavaScript →
+            searchBox = document.querySelector("#searchBox");
+            countries = document.querySelector("#countries");
+            var when = "keyup"; //You can change this to keydown, keypress or change
+
+            searchBox.addEventListener("keyup", function (e) {
+            var text = e.target.value; 
+            var options = countries.options; 
+            for (var i = 0; i < options.length; i++) {
+                    var option = options[i]; 
+                    var optionText = option.text; 
+                    var lowerOptionText = optionText.toLowerCase();
+                    var lowerText = text.toLowerCase(); 
+                    var regex = new RegExp("^" + text, "i");
+                    var match = optionText.match(regex); 
+                    var contains = lowerOptionText.indexOf(lowerText) != -1;
+                    if (match || contains) {
+                            option.selected = true;
+                            return;
+                    }
+                searchBox.selectedIndex = 0;
+            }
+            });
+
+
+
+:::  LINK: http://www.webcoachbd.com/javascript-tutorials
+
+:::  DOM = document Object Model
+
+::: async  : পেজের যেকোন কাজ যাতে বন্ধ না হয় কিংবা স্ক্রিপ্ট লোডের জন্য দেরি করতে না হয় সেটা ঠিক করে দেয়া যায়
+::: defer : দিলে পেজ সম্পূর্ন আগে লোড হবে এরপর জাভাস্ক্রিপ্ট কোড এক্সিকিউট শুরু হবে।
+::: Syntax : <script type="text/javascript" src="/test.js" defer></script>
+::: জাভাস্ক্রিপ্ট এ ভেরিয়েবলের নাম এবং স্টেটমেন্ট case sensitive অর্থ্যাৎ var webcoach এবং var Webcoach সম্পূর্ন আলাদা ভেরিয়েবল
+::: জাভাস্ক্রিপ্ট এ অন্যান্য ল্যাংগুয়েজের মত ডেটা type লিখে দিতে হয়না। পিএইচপির মত সে নিজে নিজেই বের করে নিতে পারে যে ভেরিয়েবলের মান বা ডেটা টি কোন ধরনের।
+::: java script er error show kore console a
+::: variable concat kore + diye
+::: যখন একটা ভেরিয়েবল ডিক্লেয়ার করা হয় কিন্তু এতে কিছু assign করা হয়না বা initialize করা না হয় তখন এই ভেরিয়েবলটির ডেটা টাইপ "undefined" হবে। এই ডেটা টাইপের একটাই মান undefined
+::: যেকোন লেখা বা টেক্সট কে জাভাস্ক্রিপ্ট স্ট্রিং ডেটা হিসেবে গন্য করে।
+:::  null আর undefined প্রায় একই, একটা পার্থক্য হচ্ছে কোন ভেরিয়েবলের মান null assign করতে পারে কিন্তু undefined দিতে পারবেন না। 
+          var webcoach = null; এভাবে ভেরিয়েবল initialize করতে পারেন। এই ডেটা টাইপের মান একটাই অর্থ্যাৎ null.
+
+
+
+::: Document.write < দিয়ে <script></script> টেগ এর মদ্ধে কিছু লিখলে সেইটা ব্রাউজার এ show করবে । নাইলে করবে নাহ।
+
+::: Array.length > অনেক কাজ !!!!
+
+::: slice() ; splice()
+
+::: একটা অ্যারের কোন একটা এলিমেন্ট কোন্ পজিশনে আছে সেটা খুজে বের করতে indexOf() মেথড ব্যবহার করা হয়।
+
+::: lastIndexOf() দিয়ে অ্যারের শেষ দিকে থেকে খোজা শুরু করে যেখানে indexOf() দিয়ে অ্যারের প্রথম দিক থেকে খোজা শুরু করে।
+
+::: array.join() এই ফাংশন দিয়ে অ্যারের এলিমেন্টকে স্ট্রিং এ রুপান্তর করা যায় এবং আপনি চাইলে যেকোন চিহ্ন দিয়ে স্ট্রিংগুলিকে আলাদা করে দেখতে পারেন।
+
+::: javaScript দিয়ে Direct Print দেয়া জায়
+
+::: window.location="http://www.google.com"; window.location এরপর সমান (=) চিহ্ন দিয়ে কোটেশনের ভিতর URL দিতে হয়। এটা <head> ট্যাগের ভিতর রাখতে হবে যদি চান পুরানা সাইটে (URL) এ ঢোকার সাথে সাথে নতুন URL এ নিয়ে যাবেন।
+
+::: setTimeout() ফাংশনটি প্রথম প্যারামিটার একটা ফাংশন নেয় এবং পরেরটি কতক্ষন সময় পর ফাংশনটি এক্সিকিউট হবে সেটা। যেমন এখানে 10000 দেয়াতে rdirect() ফাংশনটি ১০ সেকেন্ড পর কাজ করা শুরু করবে, এরমধ্যে document.write() দিয়ে যে মেসেজটি দিয়েছি সেটা পেজে দেখাবে।
+
+::: var f_name = document.getElementById('first_name').value; এই ক্ষেত্রে আমার ফরম এর মদ্ধে যে field এর id=”first_name” থাকবে সেইটার ভেলু variable “f_name” এর মদ্ধে জমাহবে ।
+
+::: isNaN একটা ফাংশন এটা দিয়ে নাম্বার চেক করা যায় (নাম্বারটি শুদ্ধ কিনা)। যদি isNaN(t) == false হয় তাহলে তার মানে নাম্বার টাইপ করেছে তখন এলার্ট দিয়ে রিটার্ন করে দিয়েছি। কেননা মানুষের নামতো কখনও নাম্বার হবেনা। NaN (Not a Number).
+
+::: onsubmit="return validateForm() ; from validaton এর জন্য use করা হয়।
+
+::: SweetAlart2:  http://www.sacheprofessional.com.br/js/sweetalert2-master/example/
+
+
+::: Link : http://www.webcoachbd.com/jquery-tutorials
+
+
+::: প্রয়োজনীও কিছু elements:
+
+::: Class ধরে  select করার জন্য “$(‘.className)”  লিখলেই হবে
+
+::: ID ধরে select করার জন্য , এই নিয়ম ঃ $(‘#tutorial’) 
+
+:::  css() হচ্ছে জেকোয়েরির একটা মেথড যেটা দিয়ে কোন এলিমেন্টে সিএসএস প্রোপার্টিজ চেক করা যায় (যেমন আমি করলাম) আবার নতুন সিএসএস প্রোপার্টিজও যোগ করা যায়।
+
+::: Var abc = jQuery.noConflict(); এইটা দিলে অনেক jQuery Conflict হবে নাহ ; এরপর সুধু  $ < এই চিহ্ন বাদ দিয়ে abc লিখতে হবে সব জায়গায়
+bind মেথড দিয়ে একসাথে যতগুলি ইচ্ছা ইভেন্ট স্পেস দিয়ে লিখবেন এরপর যেকোন ফাংশন লিখবেন। অনেক গুলা ইভেন্ট একসাথে ফায়ার করা জায়
+
+::: .(ডট) দিয়ে দিয়ে অনেক গুলা method এক সাথে লিখা জায় এক টার পর একটা 
+
+::: .this << function এর অনেক কাজ ; সেইগুলা আরো দেখতে হবে আর toggle দিয়ে সাধারনত কোন ডিভ দৃশ্যমান/অদৃশ্য ইত্যাদি করতে বেশি ব্যবহৃত হয়।
+
+::: slideToggle দিয়ে যেকোন ডিভ বা এলিমেন্টকে smoothly উঠানামা করাতে পারবেন।
+
+::: attr() মেথড দিয়ে যেকোন এলিমেন্টের যেকোন এট্রিবিউট বের করে আনা যায় যেমন আমি href এর মান এনেছি। যদি ছবি হয় তাহলে attr('src') এভাবে ছবির সোর্স বা যেকোন এট্রিবিউট বের করতে পারবেন।
+
+::: Get Current Row value
+        var history_data = $(this).closest('tr');
+        var history_data_all = $('#full_info_table').dataTable().fnGetData(history_data);
+        

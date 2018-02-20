@@ -1,0 +1,11 @@
+::: To see the list of cron Write → crontab -l
+::: To Edit or add cron write → 
+        Crontab -e
+        Ex : * * * * * get -q -O /dev/null http://192.168.101.40:7899/WebServices/generateOutputContent
+        Press ESC
+        Press :wq to quit.
+        Then restart the cron  → Service crond restart
+:::  See https://crontab.guru/#*_*_*_*_* for help
+::: To edit or add cron to existing file
+        Write command → cat file path 
+::: To see inside a cron file → Write → vi file path

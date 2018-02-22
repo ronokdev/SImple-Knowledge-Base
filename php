@@ -339,4 +339,7 @@ Format :
         
 ::: Laravel Eliquent Delete →
         $res=System::where('id',$tempRequest['id'])->delete();
+        
+::: Run Audio File →
+        <audio src="FullFilePath" controls></audio>
     

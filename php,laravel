@@ -342,6 +342,10 @@ Format :
         
 ::: Run Audio File →
         <audio src="FullFilePath" controls></audio>
+        
+        
+::: Make Model From Existing Database →
+        https://github.com/reliese/laravel
 
 #___________________________________________Laravel 5.5_____________________________________________________________
 

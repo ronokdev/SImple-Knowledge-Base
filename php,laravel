@@ -324,6 +324,7 @@ Format :
             'database_FieldName' => $data['RespectiveFieldName_of_form'],
 			'database_FieldName' => $data['RespectiveFieldName_of_form'],
         ]);
+		
         
 ::: htaccess problem, URL not found exception 
         Solve →

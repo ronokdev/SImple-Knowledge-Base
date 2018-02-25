@@ -8,6 +8,7 @@
                      
 ::: Post Requst with HTTp →
 
+    var dataInArray = {key:value,key1:value}; 
     this.$http.post('ControllerUrl',dataInArray,{
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

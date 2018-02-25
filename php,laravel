@@ -353,6 +353,12 @@ Format :
         
 ::: Make Model From Existing Database →
         https://github.com/reliese/laravel
+	
+::: RAW db Query →
+	use DB;
+	
+	$test = DB::select(DB::raw("Your Query"));
+    	$test = json_decode(json_encode($test), true);
 
 #___________________________________________Laravel 5.5_____________________________________________________________
 

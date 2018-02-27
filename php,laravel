@@ -359,8 +359,16 @@ Format :
 	
 	$test = DB::select(DB::raw("Your Query"));
     	$test = json_decode(json_encode($test), true);
+	
+::: Laravel path
+	→ Public folder Path : public_path()
+	→ project's root folder : base_path();
+	→ Project's app folder : app_path();
+	→ Project's 'public' folder : public_path();
+	→ Project's 'app/storage' folder : storage_path();
+	
 
-#___________________________________________Laravel 5.5_____________________________________________________________
+ #___________________________________________Laravel 5.5_____________________________________________________________
 
 ::: RefUrl for New Feature List of Laravel 5.5 → 
         https://www.youtube.com/watch?v=tDT5aEbrzRs&list=PLfdtiltiRHWG4xMZm1OL_wglxkBo8v_xN&index=15

@@ -324,3 +324,5 @@
         → queue remove member MemberName from QueueName
         → Example : queue remove member SIP/1009 from totthoapa_queue
 		
+::: Origineate Call From CLI 
+	originate SIP/sip_name/CallerNumber extension Extention@ContextName

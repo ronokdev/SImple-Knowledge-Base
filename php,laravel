@@ -314,9 +314,10 @@ Format :
         
 ::: Save Using Eliquent Model →
         → $data = $request->all();
-        → AssosiateModelName ::: create([
+        → $test = AssosiateModelName ::: create([
             'database_FieldName' => $data['RespectiveFieldName_of_form'],
         ]);
+	$lastInsertId = $test->id;
 		
 ::: Update Using Eliquent Model →
         → $data = $request->all();

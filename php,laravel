@@ -327,7 +327,7 @@ Format :
         ]);
 
 ::: Get Using Eliquent Model →
-        → $tempResult =  DiseasesWiseReport::get(['Column1','Column2','Column3'])->toArray();
+        → $tempResult =  DiseasesWiseReport::orderBy('ColumnName', 'DESC')->get(['Column1','Column2','Column3'])->toArray();
 	
 ::: Eliquent get first & last ROW of a Specefic DB table 
 	→ $tempResult =  AssosiateModelName::get()->first();

@@ -324,6 +324,9 @@ Format :
             'database_FieldName' => $data['RespectiveFieldName_of_form'],
 			'database_FieldName' => $data['RespectiveFieldName_of_form'],
         ]);
+
+::: Get Using Eliquent Model →
+        → $tempResult =  DiseasesWiseReport::get(['Column1','Column2','Column3'])->toArray();
 		
 ::: htaccess problem, URL not found exception 
         Solve →

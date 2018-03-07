@@ -51,6 +51,11 @@ if(isset($_POST['submit']))   {
 ::: httpd will Automatically Start on Server StartUp → chkconfig --level 345 httpd on
 ::: mysqld will Automatically Start on Server StartUp → chkconfig --level 345 mysqld on
 
+
+::: Add Indexing to a database table  
+    → ALTER TABLE tableName ADD INDEX index_name (index_columns);
+
+
 ::: Setting password to Mysql:
         mysql -u root
         use mysql;

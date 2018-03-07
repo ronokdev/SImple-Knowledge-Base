@@ -325,6 +325,11 @@ Format :
             'database_FieldName' => $data['RespectiveFieldName_of_form'],
 			'database_FieldName' => $data['RespectiveFieldName_of_form'],
         ]);
+	
+::: Eliquent get first & last ROW of a Specefic DB table 
+	→ $tempResult =  AssosiateModelName::get()->first();
+	→ $tempResult =  AssosiateModelName::get()->last();
+	
 		
 ::: htaccess problem, URL not found exception 
         Solve →

@@ -314,12 +314,13 @@ Format :
         
 ::: Save Using Eliquent Model →
         → $data = $request->all();
-        → AssosiateModelName ::: create([
+        → $test = AssosiateModelName ::: create([
             'database_FieldName' => $data['RespectiveFieldName_of_form'],
         ]);
+	$lastInsertId = $test->id;
 		
 ::: Update Using Eliquent Model →
-        → $data = $request->all();
+        → $data = $request->all(); 
         → AssosiateModelName :::where('dbFieldName',Value)->update([
             'database_FieldName' => $data['RespectiveFieldName_of_form'],
 			'database_FieldName' => $data['RespectiveFieldName_of_form'],
@@ -327,6 +328,11 @@ Format :
 
 ::: Get Using Eliquent Model →
         → $tempResult =  DiseasesWiseReport::get(['Column1','Column2','Column3'])->toArray();
+	
+::: Eliquent get first & last ROW of a Specefic DB table 
+	→ $tempResult =  AssosiateModelName::get()->first();
+	→ $tempResult =  AssosiateModelName::get()->last();
+	
 		
 ::: htaccess problem, URL not found exception 
         Solve →
@@ -356,8 +362,22 @@ Format :
         
 ::: Make Model From Existing Database →
         https://github.com/reliese/laravel
+	
+::: RAW db Query →
+	use DB;
+	
+	$test = DB::select(DB::raw("Your Query"));
+    	$test = json_decode(json_encode($test), true);
+	
+::: Laravel path
+	→ Public folder Path : public_path()
+	→ project's root folder : base_path();
+	→ Project's app folder : app_path();
+	→ Project's 'public' folder : public_path();
+	→ Project's 'app/storage' folder : storage_path();
+	
 
-#___________________________________________Laravel 5.5_____________________________________________________________
+ #___________________________________________Laravel 5.5_____________________________________________________________
 
 ::: RefUrl for New Feature List of Laravel 5.5 → 
         https://www.youtube.com/watch?v=tDT5aEbrzRs&list=PLfdtiltiRHWG4xMZm1OL_wglxkBo8v_xN&index=15

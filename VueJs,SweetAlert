@@ -224,4 +224,6 @@
 ::: Echo vuejs Object array Into HTML attribute :
      → <audio :src="array.index" controls></audio>
   
-  
+::: Vue JS Life Cycle
+ Link: https://alligator.io/vuejs/component-lifecycle/
+ 

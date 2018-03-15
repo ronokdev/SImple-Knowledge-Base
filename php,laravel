@@ -362,6 +362,9 @@ Format :
         
 ::: Make Model From Existing Database →
         https://github.com/reliese/laravel
+        
+        → Make model from database table :
+                php artisan code:models --table=TableName
 	
 ::: RAW db Query →
 	use DB;

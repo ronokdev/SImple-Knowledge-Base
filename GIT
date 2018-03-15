@@ -26,3 +26,6 @@
 	
 ::: Delete Branch In Remote →
 	git push origin --delete branchName
+
+::: GII force Checkout →
+	git checkout -f branchName

@@ -1,3 +1,5 @@
+::: REG URL → https://github.com/ratiw/vuetable-2-tutorial/wiki
+
 ::: GET request → 
      this.$http.get('/fetchSystem').then(response => {
                              this.tableData = this.allsystem = response.body;

@@ -98,7 +98,11 @@
 
 ::: Asterisk Log file directory → cd /var/log/asterisk
 
-
+::: ODBC Install
+	->yum search unixODBC | grep devel
+	->install  unixODBC unixODBC-devel.x86_64  libtool-ltdl libtool-ltdl-devel.x86_64  python-devel.x86_64  python-pip MySQL-python
+	->yum localinstall https://dev.mysql.com/get/Downloads/Connector-ODBC/5.3/mysql-connector-odbc-5.3.9-1.el6.x86_64.rpm
+	
 ::: Asterisk 13.17 on Centos 6 Install Process
         reflink1 : https://linoxide.com/tools/install-setup-asterisk-13-pbx-centos-7/
         reflink2 :  http://www.ipcomms.net/sample-device-configurations/41-asterisk/179-asterisk-13-on-centos

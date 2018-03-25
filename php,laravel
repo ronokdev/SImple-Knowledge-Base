@@ -384,6 +384,10 @@ Format :
 :: Universal ROUTE →
 	Route::any('{all}', function(){ return view('folderName.viewFileName'); })->where('all', '.*');
 	
+	
+:: Run Laravel to a Specifiv Port 
+	php artisan serve --port=YourPortNumber
+	
 
  #___________________________________________Laravel 5.5_____________________________________________________________
 

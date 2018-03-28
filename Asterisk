@@ -329,4 +329,9 @@
         → Example : queue remove member SIP/1009 from totthoapa_queue
 		
 ::: Origineate Call From CLI 
-	originate SIP/sip_name/CallerNumber extension Extention@ContextName
+	channel originate SIP/sip_name/CallerNumber extension Extention@ContextName
+	
+	Example →
+	  : channel originate SIP/YourSIPname/YourphoneNumber extension 9999@ContextName
+	  : channel originate SIP/YourSIPname/YourphoneNumber extension
+	

@@ -1,4 +1,5 @@
 ::: REG URL → <a href="https://github.com/ratiw/vuetable-2-tutorial/wiki">https://github.com/ratiw/vuetable-2-tutorial/wiki</a>
+            →  http://vuejs.creative-tim.com/vuetable-2-tutorial
 
 ::: GET request → 
      this.$http.get('/fetchSystem').then(response => {

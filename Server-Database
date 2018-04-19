@@ -147,3 +147,6 @@ if(isset($_POST['submit']))   {
       firewall-cmd --reload
   → You can see that it is now among the list of available services: : 
       firewall-cmd --get-services
+
+::: Import very large database into xampp (will also work with linux webserver)
+mysql -u {DB username} -p -v {DB Name} < "{DB location}"

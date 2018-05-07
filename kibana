@@ -131,7 +131,73 @@
 #__Install Logstash ----------------------------
 :: The Logstash package shares the same GPG Key as Elasticsearch.so let's create and edit a new Yum repository file for Logstash:
    →  vi /etc/yum.repos.d/logstash.repo
-	
+   Add Following Configuration
+       	    [logstash-2.2]
+	    name=logstash repository for 2.2 packages
+	    baseurl=http://packages.elasticsearch.org/logstash/2.2/centos
+	    gpgcheck=1
+	    gpgkey=http://packages.elasticsearch.org/GPG-KEY-elasticsearch
+	    enabled=1
+  → yum -y install logstash
+	    
+#__Generate SSL Certificates__________
+:: No DNS Server , Using Private IP Address
+→ vi /etc/pki/tls/openssl.cnf
+  Find the [ v3_ca ] section in the file, and add this line under it (substituting in the ELK Server's private IP address):
+  subjectAltName = IP: XXX.XXX.XXX.XXX
+  Save and exit
+  
+  Now generate the SSL certificate and private key in the appropriate locations (/etc/pki/tls/), with the following commands:
+→ cd /etc/pki/tls
+→ sudo openssl req -config /etc/pki/tls/openssl.cnf -x509 -days 3650 -batch -nodes -newkey rsa:2048 -keyout private/logstash-forwarder.key -out certs/logstash-forwarder.crt
+
+:: Configure Logstash
+  Let's create a configuration file called 02-beats-input.conf and set up our "filebeat" input:
+→ sudo vi /etc/logstash/conf.d/02-beats-input.conf
+  Insert the following input configuration:
+      input {
+      beats {
+        port => 5044
+        ssl => true
+        ssl_certificate => "/etc/pki/tls/certs/logstash-forwarder.crt"
+        ssl_key => "/etc/pki/tls/private/logstash-forwarder.key"
+      }
+    }
+  Save and quit
+  Now let's create a configuration file called 10-syslog-filter.conf, where we will add a filter for syslog messages:
+→ sudo vi /etc/logstash/conf.d/10-syslog-filter.conf
+  Insert the following syslog filter configuration:
+      filter {
+      if [type] == "syslog" {
+        grok {
+          match => { "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_hostname} %{DATA:syslog_program}(?:\[%{POSINT:syslog_pid}\])?: %{GREEDYDATA:syslog_message}" }
+          add_field => [ "received_at", "%{@timestamp}" ]
+          add_field => [ "received_from", "%{host}" ]
+        }
+        syslog_pri { }
+        date {
+          match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]
+        }
+      }
+    }
+ Save and quit.
+ Lastly, we will create a configuration file called 30-elasticsearch-output.conf:
+→ sudo vi /etc/logstash/conf.d/30-elasticsearch-output.conf
+  Insert the following output configuration:
+      output {
+      elasticsearch {
+        hosts => ["localhost:9200"]
+        sniffing => true
+        manage_template => false
+        index => "%{[@metadata][beat]}-%{+YYYY.MM.dd}"
+        document_type => "%{[@metadata][type]}"
+      }
+    }
+
+  Test your Logstash configuration with this command:
+→ sudo service logstash configtest
+→ sudo systemctl restart logstash
+→ sudo chkconfig logstash on
 
 
 
